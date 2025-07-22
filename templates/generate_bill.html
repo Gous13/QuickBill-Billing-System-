@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Generate Bill</h3>
+<form method="post" id="billForm">
+  <div class="mb-3">
+    <label>Select Customer</label>
+    <select name="customer" id="customerSelect" class="form-control" required>
+      <option value="">Select</option>
+      {% for c in customers %}
+      <option value="{{ c.id }}">{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div id="productList"></div>
+  <button class="btn btn-success mt-3" type="submit">Generate Bill</button>
+</form>
+
+<!-- Popup Modal -->
+{% if popup %}
+<div class="modal show" style="display:block; background:rgba(0,0,0,0.5)">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Bill Generated</h5>
+      </div>
+      <div class="modal-body">
+        <p><b>Bill ID:</b> {{ bill_id }}</p>
+        <p><b>Date:</b> {{ date }}</p>
+        <p><b>Total:</b> {{ total }}</p>
+        <h6>Items:</h6>
+        <ul>
+          {% for i in items %}
+          <li>{{ i[0] }} - {{ i[1] }} x {{ i[2] }} = {{ i[1]*i[2] }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary" href="/">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<script>
+document.getElementById("customerSelect").addEventListener("change", function(){
+  let customerId = this.value;
+  let productDiv = document.getElementById("productList");
+  productDiv.innerHTML = "";
+  if(customerId){
+    fetch("/get_products/" + customerId)
+      .then(res => res.json())
+      .then(data => {
+        data.forEach(p => {
+          productDiv.innerHTML += `
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="product" value="${p.id}">
+              <label class="form-check-label">${p.product_name} (${p.price} Rs)</label>
+              <input type="number" name="quantity" class="form-control" value="1" style="width:80px;display:inline-block">
+            </div>`;
+        });
+      })
+  }
+});
+</script>
+{% endblock %}

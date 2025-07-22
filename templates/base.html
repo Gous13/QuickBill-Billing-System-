@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        
+        .navbar-custom {
+            background-color: black;
+            border: 3px solid white;
+           
+        }
+        .navbar-custom .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+        }
+        .navbar-custom .btn-nav {
+            margin-left: 8px;
+            color: white !important;
+            border: 1px solid white;
+        }
+        .navbar-custom .btn-nav:hover {
+            background-color: white;
+            color: orangered !important;
+            font-weight: bold;
+        }
+
+        /* ✅ Video background full-width */
+        .video-background {
+            position: relative;
+            width: 100%;
+            height: 500px; /* adjust if needed */
+            overflow: hidden;
+            z-index: 1;
+        }
+        .video-background video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ✅ Overlay text on video */
+        .video-overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 5;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 20px 40px;
+            border-radius: 10px;
+        }
+        .video-overlay-text h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .video-overlay-text p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ✅ Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">QuickBill</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="ms-auto">
+        <a class="btn btn-nav" href="/add_customer">Add Customer</a>
+        <a class="btn btn-nav" href="/view_customers">View Customers</a>
+        <a class="btn btn-nav" href="/add_product">Add Product</a>
+        <a class="btn btn-nav" href="/generate_bill">Generate Bill</a>
+        <a class="btn btn-nav" href="/search_bill">Search Bill</a>
+        <a class="btn btn-nav" href="/bill_history">Bill History</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ✅ Background Video + Overlay Text (Only visible on home page ideally) -->
+{% if request.path == '/' %}
+<div class="video-background">
+    <video autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='exp.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay-text">
+        <h1>Welcome to <span style="color: yellow;">QuickBill</span></h1>
+        <p>Your smart and simple billing solution – manage customers, products, and bills with ease!</p>
+    </div>
+</div>
+{% endif %}
+
+<!-- ✅ Page Content -->
+<div class="container mt-4 mb-5">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success">
+                {% for msg in messages %}
+                    {{ msg }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</div>
+
+<!-- ✅ Footer -->
+<footer>
+    © 2025 Billing Application | All Rights Reserved
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

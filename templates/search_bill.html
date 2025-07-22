@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Search Bill</h3>
+<form method="post">
+  <div class="mb-3">
+    <label>Enter Bill ID</label>
+    <input type="number" name="bill_id" class="form-control" required>
+  </div>
+  <button class="btn btn-primary" type="submit">Search</button>
+</form>
+
+{% if bill_data %}
+  {% if bill_data[0] %}
+    <div class="card mt-4">
+      <div class="card-body">
+        <h5 class="card-title">Bill Details</h5>
+        <p><b>Bill ID:</b> {{ bill_data[0].bill_id }}</p>
+        <p><b>Customer:</b> {{ bill_data[0].customer_name }}</p>
+        <p><b>Date:</b> {{ bill_data[0].date }}</p>
+        <p><b>Total:</b> {{ bill_data[0].total }}</p>
+        <h6>Items:</h6>
+        <ul>
+          {% for i in bill_data[1] %}
+          <li>{{ i.product_name }} - {{ i.quantity }} x {{ i.price }} = {{ i.quantity * i.price }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% else %}
+    <p class="text-danger mt-3">No Bill Found!</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

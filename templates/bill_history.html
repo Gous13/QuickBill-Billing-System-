@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Bill History</h3>
+<table class="table table-bordered">
+  <tr><th>Bill ID</th><th>Customer Name</th><th>Total</th><th>Date</th></tr>
+  {% for b in bills %}
+  <tr>
+    <td>{{ b.bill_id }}</td>
+    <td>{{ b.name }}</td>
+    <td>{{ b.total }}</td>
+    <td>{{ b.date }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
